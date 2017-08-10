@@ -9,7 +9,12 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.widget.Toast;
+
+import java.util.Arrays;
+import java.util.List;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -67,6 +72,19 @@ public class MainActivity extends AppCompatActivity {
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
             View rootView = inflater.inflate(R.layout.fragment_main, container, false);
+            Context context = getActivity();
+
+            List<String> mockWeatherData = Arrays.asList("Hey", "Ho", "hey", "ho", "off", "to", "work", "we", "go");
+            ArrayAdapter<String> forecastAdaptor =
+                    new ArrayAdapter<>(
+                            context,
+                            R.layout.list_item_forecast,
+                            R.id.list_item_forecast_textview,
+                            mockWeatherData);
+
+            ListView listViewForecast = rootView.findViewById(R.id.listview_forecast);
+            listViewForecast.setAdapter(forecastAdaptor);
+
             return rootView;
         }
     }
