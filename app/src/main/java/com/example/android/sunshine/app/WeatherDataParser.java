@@ -1,7 +1,6 @@
 package com.example.android.sunshine.app;
 
 import android.text.format.Time;
-import android.util.Log;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -10,8 +9,6 @@ import org.json.JSONObject;
 import java.text.SimpleDateFormat;
 
 class WeatherDataParser {
-
-    private static final String LOG_TAG = WeatherDataParser.class.getSimpleName();
 
     /* The date/time conversion code is going to be moved outside the asynctask later,
          * so for convenience we're breaking it out into its own method now.
@@ -102,10 +99,6 @@ class WeatherDataParser {
 
             highAndLow = formatHighLows(high, low);
             resultStrs[i] = day + " - " + description + " - " + highAndLow;
-        }
-
-        for (String s : resultStrs) {
-            Log.v(LOG_TAG, "Forecast entry: " + s);
         }
 
         return resultStrs;
