@@ -6,6 +6,9 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -31,6 +34,8 @@ public class ForecastFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
+        setHasOptionsMenu(true);
+
         Context context = getActivity();
 
         List<String> mockWeatherData = Arrays.asList("Hey", "Ho", "hey", "ho", "off", "to", "work", "we", "go");
@@ -44,6 +49,28 @@ public class ForecastFragment extends Fragment {
         ListView listViewForecast = rootView.findViewById(R.id.listview_forecast);
         listViewForecast.setAdapter(forecastAdaptor);
 
+        return rootView;
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.forecastfragment, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        switch (item.getItemId()) {
+            case R.id.action_refresh:
+                fetchWeatherData();
+
+                return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void fetchWeatherData() {
         WeatherFetchingTask weatherFetcher = new WeatherFetchingTask();
         weatherFetcher.execute();
         String weatherDataJson = null;
@@ -54,8 +81,6 @@ public class ForecastFragment extends Fragment {
         }
 
         Log.i(LOG_TAG + ":jsonData", weatherDataJson);
-
-        return rootView;
     }
 
     private static class WeatherFetchingTask extends AsyncTask<Void, Void, String> {
