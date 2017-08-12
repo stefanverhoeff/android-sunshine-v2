@@ -19,6 +19,7 @@ import java.util.concurrent.ExecutionException;
 
 public class ForecastFragment extends Fragment {
     static String LOG_TAG = ForecastFragment.class.getSimpleName();
+
     private static final Double LEMPALA_LAT = 61.31323;
     private static final Double LEMPALA_LON = 23.75497;
 

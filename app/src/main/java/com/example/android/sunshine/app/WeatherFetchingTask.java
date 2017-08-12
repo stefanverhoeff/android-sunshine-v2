@@ -48,6 +48,8 @@ class WeatherFetchingTask extends AsyncTask<Double, Void, String> {
                     .build();
             URL weatherUrl = new URL(weatherUri.toString());
 
+            Log.v(LOG_TAG, "URL: " + weatherUrl);
+
             // Create the request to OpenWeatherMap, and open the connection
             urlConnection = (HttpURLConnection) weatherUrl.openConnection();
             urlConnection.setRequestMethod("GET");
