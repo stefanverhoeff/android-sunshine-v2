@@ -22,7 +22,7 @@ import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 public class ForecastFragment extends Fragment {
-    static String LOG_TAG = ForecastFragment.class.getCanonicalName();
+    static String LOG_TAG = ForecastFragment.class.getSimpleName();
 
     public ForecastFragment() {
     }
@@ -59,6 +59,11 @@ public class ForecastFragment extends Fragment {
     }
 
     private static class WeatherFetchingTask extends AsyncTask<Void, Void, String> {
+
+        static final String LOG_TAG = WeatherFetchingTask.class.getSimpleName();
+        static final String APP_ID = "b95677c89902dc35959d2ef9c3a455d9";
+        static final int TAMPERE_CITY_ID = 634963;
+
         @Override
         protected String doInBackground(Void... objects) {
             // These two need to be declared outside the try/catch
@@ -73,9 +78,7 @@ public class ForecastFragment extends Fragment {
                 // Construct the URL for the OpenWeatherMap query
                 // Possible parameters are avaiable at OWM's forecast API page, at
                 // http://openweathermap.org/API#forecast
-                String appId = "b95677c89902dc35959d2ef9c3a455d9";
-                int tampereCityId = 634963;
-                URL url = new URL("http://api.openweathermap.org/data/2.5/forecast/daily?id=" + tampereCityId + "&units=metric&mode=json&cnt=7&appid=" + appId);
+                URL url = new URL("http://api.openweathermap.org/data/2.5/forecast/daily?id=" + TAMPERE_CITY_ID + "&units=metric&mode=json&cnt=7&appid=" + APP_ID);
 
                 // Create the request to OpenWeatherMap, and open the connection
                 urlConnection = (HttpURLConnection) url.openConnection();
@@ -105,7 +108,7 @@ public class ForecastFragment extends Fragment {
                 }
                 forecastJsonStr = buffer.toString();
             } catch (IOException e) {
-                Log.e("ForecastFragment", "Error ", e);
+                Log.e(LOG_TAG, "Error ", e);
                 // If the code didn't successfully get the weather data, there's no point in attemping
                 // to parse it.
                 return null;
@@ -117,7 +120,7 @@ public class ForecastFragment extends Fragment {
                     try {
                         reader.close();
                     } catch (final IOException e) {
-                        Log.e("ForecastFragment", "Error closing stream", e);
+                        Log.e(LOG_TAG, "Error closing stream", e);
                     }
                 }
             }
