@@ -66,13 +66,13 @@ public class ForecastFragment extends Fragment {
     private void fetchWeatherData() {
         WeatherFetchingTask weatherFetcher = new WeatherFetchingTask();
         weatherFetcher.execute(LEMPALA_LAT, LEMPALA_LON);
-        String weatherDataJson = null;
+        String[] weatherForecast = null;
         try {
-            weatherDataJson = weatherFetcher.get();
+            weatherForecast = weatherFetcher.get();
         } catch (InterruptedException | ExecutionException e) {
             Log.e(LOG_TAG, e.getMessage(), e);
         }
 
-        Log.i(LOG_TAG + ":jsonData", weatherDataJson);
+        Log.i(LOG_TAG + ":forecasts", Arrays.toString(weatherForecast));
     }
 }

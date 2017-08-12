@@ -4,6 +4,8 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import org.json.JSONException;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -11,14 +13,15 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-class WeatherFetchingTask extends AsyncTask<Double, Void, String> {
+class WeatherFetchingTask extends AsyncTask<Double, Void, String[]> {
 
     private static final String LOG_TAG = WeatherFetchingTask.class.getSimpleName();
     private static final String APP_ID = "b95677c89902dc35959d2ef9c3a455d9";
     private static final String WEATHER_DAILY_URL_BASE = "http://api.openweathermap.org/data/2.5/forecast/daily";
+    private static final int DAYS = 7;
 
     @Override
-    protected String doInBackground(Double... coordinates) {
+    protected String[] doInBackground(Double... coordinates) {
         // These two need to be declared outside the try/catch
         // so that they can be closed in the finally block.
         HttpURLConnection urlConnection = null;
@@ -43,7 +46,7 @@ class WeatherFetchingTask extends AsyncTask<Double, Void, String> {
                     .appendQueryParameter("lon", longitude.toString())
                     .appendQueryParameter("units", "metric")
                     .appendQueryParameter("mode", "json")
-                    .appendQueryParameter("cnt", "7")
+                    .appendQueryParameter("cnt", ""+DAYS)
                     .appendQueryParameter("appid", APP_ID)
                     .build();
             URL weatherUrl = new URL(weatherUri.toString());
@@ -95,6 +98,14 @@ class WeatherFetchingTask extends AsyncTask<Double, Void, String> {
             }
         }
 
-        return forecastJsonStr;
+        WeatherDataParser weatherDataParser = new WeatherDataParser();
+        String[] weatherForecast = {};
+        try {
+            weatherForecast = weatherDataParser.getWeatherDataFromJson(forecastJsonStr, DAYS);
+        } catch (JSONException e) {
+            Log.e(LOG_TAG, "Failed to parse weather JSON", e);
+        }
+
+        return weatherForecast;
     }
 }
