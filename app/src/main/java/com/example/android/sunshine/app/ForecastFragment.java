@@ -9,8 +9,10 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,7 +31,7 @@ public class ForecastFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
         setHasOptionsMenu(true);
 
-        Context context = getActivity();
+        final Context context = getActivity();
 
         forecastAdaptor = new ArrayAdapter<>(
                 context,
@@ -37,8 +39,15 @@ public class ForecastFragment extends Fragment {
                 R.id.list_item_forecast_textview,
                 weatherData);
 
-        ListView listViewForecast = rootView.findViewById(R.id.listview_forecast);
+        final ListView listViewForecast = rootView.findViewById(R.id.listview_forecast);
         listViewForecast.setAdapter(forecastAdaptor);
+        listViewForecast.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
+                String item = forecastAdaptor.getItem(position);
+                Toast.makeText(context, "Got clicked @ " + item, Toast.LENGTH_SHORT).show();
+            }
+        });
 
         // Trigger initial weather data fetch
         fetchWeatherData();
