@@ -3,6 +3,7 @@ package com.example.android.sunshine.app;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.util.Log;
+import android.widget.ArrayAdapter;
 
 import org.json.JSONException;
 
@@ -12,6 +13,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.Arrays;
 
 class WeatherFetchingTask extends AsyncTask<Double, Void, String[]> {
 
@@ -19,6 +21,22 @@ class WeatherFetchingTask extends AsyncTask<Double, Void, String[]> {
     private static final String APP_ID = "b95677c89902dc35959d2ef9c3a455d9";
     private static final String WEATHER_DAILY_URL_BASE = "http://api.openweathermap.org/data/2.5/forecast/daily";
     private static final int DAYS = 7;
+
+    private ArrayAdapter<String> weatherDataAdaptor;
+
+    WeatherFetchingTask(ArrayAdapter<String> weatherDataAdaptor) {
+        this.weatherDataAdaptor = weatherDataAdaptor;
+    }
+
+    @Override
+    protected void onPostExecute(String[] weatherForecast) {
+        super.onPostExecute(weatherForecast);
+
+        Log.i(LOG_TAG + ":forecasts", Arrays.toString(weatherForecast));
+        weatherDataAdaptor.clear();
+        if (weatherForecast != null)
+            weatherDataAdaptor.addAll(Arrays.asList(weatherForecast));
+    }
 
     @Override
     protected String[] doInBackground(Double... coordinates) {

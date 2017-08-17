@@ -3,7 +3,6 @@ package com.example.android.sunshine.app;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -14,9 +13,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.concurrent.ExecutionException;
 
 public class ForecastFragment extends Fragment {
     static String LOG_TAG = ForecastFragment.class.getSimpleName();
@@ -34,7 +31,6 @@ public class ForecastFragment extends Fragment {
 
         Context context = getActivity();
 
-        weatherData.addAll(Arrays.asList("Hey", "Ho", "hey", "ho", "off", "to", "work", "we", "go"));
         forecastAdaptor = new ArrayAdapter<>(
                 context,
                 R.layout.list_item_forecast,
@@ -43,6 +39,9 @@ public class ForecastFragment extends Fragment {
 
         ListView listViewForecast = rootView.findViewById(R.id.listview_forecast);
         listViewForecast.setAdapter(forecastAdaptor);
+
+        // Trigger initial weather data fetch
+        fetchWeatherData();
 
         return rootView;
     }
@@ -66,20 +65,7 @@ public class ForecastFragment extends Fragment {
     }
 
     private void fetchWeatherData() {
-        WeatherFetchingTask weatherFetcher = new WeatherFetchingTask();
+        WeatherFetchingTask weatherFetcher = new WeatherFetchingTask(forecastAdaptor);
         weatherFetcher.execute(LEMPALA_LAT, LEMPALA_LON);
-        String[] weatherForecast = null;
-        try {
-            weatherForecast = weatherFetcher.get();
-        } catch (InterruptedException | ExecutionException e) {
-            Log.e(LOG_TAG, e.getMessage(), e);
-        }
-
-        Log.i(LOG_TAG + ":forecasts", Arrays.toString(weatherForecast));
-        weatherData.clear();
-        if (weatherForecast != null)
-            weatherData.addAll(Arrays.asList(weatherForecast));
-
-        forecastAdaptor.notifyDataSetChanged();
     }
 }
