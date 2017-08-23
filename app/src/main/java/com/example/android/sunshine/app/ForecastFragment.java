@@ -1,6 +1,7 @@
 package com.example.android.sunshine.app;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -44,8 +45,12 @@ public class ForecastFragment extends Fragment {
         listViewForecast.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
-                String item = forecastAdaptor.getItem(position);
-                Toast.makeText(context, "Got clicked @ " + item, Toast.LENGTH_SHORT).show();
+                String selectedWeatherItem = forecastAdaptor.getItem(position);
+                Toast.makeText(context, "Got clicked @ " + selectedWeatherItem, Toast.LENGTH_SHORT).show();
+
+                Intent weatherDetailIntent = new Intent(context, DetailActivity.class);
+                weatherDetailIntent.putExtra(Intent.EXTRA_TEXT, selectedWeatherItem);
+                startActivity(weatherDetailIntent);
             }
         });
 
