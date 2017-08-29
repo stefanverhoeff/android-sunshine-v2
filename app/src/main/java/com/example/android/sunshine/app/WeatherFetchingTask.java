@@ -15,7 +15,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Arrays;
 
-class WeatherFetchingTask extends AsyncTask<Double, Void, String[]> {
+class WeatherFetchingTask extends AsyncTask<String, Void, String[]> {
 
     private static final String LOG_TAG = WeatherFetchingTask.class.getSimpleName();
     private static final String APP_ID = "b95677c89902dc35959d2ef9c3a455d9";
@@ -39,18 +39,17 @@ class WeatherFetchingTask extends AsyncTask<Double, Void, String[]> {
     }
 
     @Override
-    protected String[] doInBackground(Double... coordinates) {
+    protected String[] doInBackground(String... coordinates) {
         // These two need to be declared outside the try/catch
         // so that they can be closed in the finally block.
         HttpURLConnection urlConnection = null;
         BufferedReader reader = null;
 
-        if (coordinates.length < 2) {
-            throw new RuntimeException("Lat/lon coordinates parameters missing");
+        if (coordinates.length < 1) {
+            throw new RuntimeException("Location parameter missing");
         }
 
-        Double latitude = coordinates[0];
-        Double longitude = coordinates[1];
+        String location = coordinates[0];
 
         // Will contain the raw JSON response as a string.
         String forecastJsonStr = null;
@@ -60,8 +59,7 @@ class WeatherFetchingTask extends AsyncTask<Double, Void, String[]> {
             // Possible parameters are avaiable at OWM's forecast API page, at
             // http://openweathermap.org/API#forecast
             Uri weatherUri = Uri.parse(WEATHER_DAILY_URL_BASE).buildUpon()
-                    .appendQueryParameter("lat", latitude.toString())
-                    .appendQueryParameter("lon", longitude.toString())
+                    .appendQueryParameter("q", location)
                     .appendQueryParameter("units", "metric")
                     .appendQueryParameter("mode", "json")
                     .appendQueryParameter("cnt", ""+DAYS)

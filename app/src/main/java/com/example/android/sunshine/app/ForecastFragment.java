@@ -20,8 +20,7 @@ import java.util.List;
 public class ForecastFragment extends Fragment {
     static String LOG_TAG = ForecastFragment.class.getSimpleName();
 
-    private static final Double LEMPALA_LAT = 61.31323;
-    private static final Double LEMPALA_LON = 23.75497;
+    private static final String LEMPALA_LOCATION = "Lempala, Finland";
     private List<String> weatherData = new ArrayList<>();
     private ArrayAdapter<String> forecastAdaptor;
 
@@ -79,6 +78,6 @@ public class ForecastFragment extends Fragment {
 
     private void fetchWeatherData() {
         WeatherFetchingTask weatherFetcher = new WeatherFetchingTask(forecastAdaptor);
-        weatherFetcher.execute(LEMPALA_LAT, LEMPALA_LON);
+        weatherFetcher.execute(LEMPALA_LOCATION);
     }
 }
