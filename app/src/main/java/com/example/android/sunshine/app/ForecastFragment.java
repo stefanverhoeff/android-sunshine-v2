@@ -2,7 +2,9 @@ package com.example.android.sunshine.app;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -20,7 +22,6 @@ import java.util.List;
 public class ForecastFragment extends Fragment {
     static String LOG_TAG = ForecastFragment.class.getSimpleName();
 
-    private static final String LEMPALA_LOCATION = "Lempala, Finland";
     private List<String> weatherData = new ArrayList<>();
     private ArrayAdapter<String> forecastAdaptor;
 
@@ -78,6 +79,9 @@ public class ForecastFragment extends Fragment {
 
     private void fetchWeatherData() {
         WeatherFetchingTask weatherFetcher = new WeatherFetchingTask(forecastAdaptor);
-        weatherFetcher.execute(LEMPALA_LOCATION);
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getContext());
+        String locationPref = sharedPref.getString(getString(R.string.pref_location_key), "");
+
+        weatherFetcher.execute(locationPref);
     }
 }
