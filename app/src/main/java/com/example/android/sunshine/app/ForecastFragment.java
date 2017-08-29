@@ -80,7 +80,7 @@ public class ForecastFragment extends Fragment {
     private void fetchWeatherData() {
         WeatherFetchingTask weatherFetcher = new WeatherFetchingTask(forecastAdaptor);
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getContext());
-        String locationPref = sharedPref.getString(getString(R.string.pref_location_key), "");
+        String locationPref = sharedPref.getString(getString(R.string.pref_location_key), getString(R.string.pref_location_default));
 
         weatherFetcher.execute(locationPref);
     }
