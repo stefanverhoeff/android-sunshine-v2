@@ -53,10 +53,15 @@ public class ForecastFragment extends Fragment {
             }
         });
 
-        // Trigger initial weather data fetch
-        fetchWeatherData();
-
         return rootView;
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        // Trigger initial weather data fetch
+        updateWeather();
     }
 
     @Override
@@ -69,7 +74,7 @@ public class ForecastFragment extends Fragment {
 
         switch (item.getItemId()) {
             case R.id.action_refresh:
-                fetchWeatherData();
+                updateWeather();
 
                 return true;
         }
@@ -77,10 +82,10 @@ public class ForecastFragment extends Fragment {
         return super.onOptionsItemSelected(item);
     }
 
-    private void fetchWeatherData() {
+    private void updateWeather() {
         WeatherFetchingTask weatherFetcher = new WeatherFetchingTask(forecastAdaptor);
-        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getContext());
-        String locationPref = sharedPref.getString(getString(R.string.pref_location_key), getString(R.string.pref_location_default));
+        SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(getContext());
+        String locationPref = sharedPrefs.getString(getString(R.string.pref_location_key), getString(R.string.pref_location_default));
 
         weatherFetcher.execute(locationPref);
     }
