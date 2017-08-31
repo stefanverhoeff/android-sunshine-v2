@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -86,6 +87,10 @@ public class ForecastFragment extends Fragment {
         WeatherFetchingTask weatherFetcher = new WeatherFetchingTask(forecastAdaptor);
         SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(getContext());
         String locationPref = sharedPrefs.getString(getString(R.string.pref_location_key), getString(R.string.pref_location_default));
+        String weatherHeader = getString(R.string.header_weather_city) + " " + locationPref;
+
+        TextView cityView = getActivity().findViewById(R.id.textView_forecast_city);
+        cityView.setText(weatherHeader);
 
         weatherFetcher.execute(locationPref);
     }

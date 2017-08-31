@@ -9,5 +9,6 @@
     <string name="title_activity_settings">Settings</string>
     <string name="pref_location_key" translatable="false">Location</string>
     <string name="pref_location_default" translatable="false">Lempala, Finland</string>
+    <string name="header_weather_city">The weather in: </string>
 
 </resources>

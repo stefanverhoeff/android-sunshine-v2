@@ -2,17 +2,25 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    android:paddingBottom="@dimen/activity_vertical_margin"
     tools:context=".ForecastFragment">
+
+    <TextView
+        android:id="@+id/textView_forecast_city"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/pref_location_default"
+        android:textSize="24sp"
+        android:textStyle="bold" />
 
     <ListView
         android:id="@+id/listview_forecast"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="8dp"
+        android:layout_height="441dp"
+        android:layout_marginTop="30dp"
         android:entries="@+id/list_item_forecast_textview" />
 
 </FrameLayout>
