@@ -87,11 +87,15 @@ public class ForecastFragment extends Fragment {
         WeatherFetchingTask weatherFetcher = new WeatherFetchingTask(forecastAdaptor);
         SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(getContext());
         String locationPref = sharedPrefs.getString(getString(R.string.pref_location_key), getString(R.string.pref_location_default));
-        String weatherHeader = getString(R.string.header_weather_city) + " " + locationPref;
+        String temperatureUnitPref = sharedPrefs.getString(getString(R.string.pref_temp_unit_key), getString(R.string.pref_temp_unit_default));
+
+        String weatherHeader = locationPref + " in " + temperatureUnitPref;
 
         TextView cityView = getActivity().findViewById(R.id.textView_forecast_city);
         cityView.setText(weatherHeader);
 
-        weatherFetcher.execute(locationPref);
+        WeatherSettings weatherSettings = new WeatherSettings(locationPref, temperatureUnitPref);
+
+        weatherFetcher.execute(weatherSettings);
     }
 }

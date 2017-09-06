@@ -15,7 +15,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Arrays;
 
-class WeatherFetchingTask extends AsyncTask<String, Void, String[]> {
+class WeatherFetchingTask extends AsyncTask<WeatherSettings, Void, String[]> {
 
     private static final String LOG_TAG = WeatherFetchingTask.class.getSimpleName();
     private static final String APP_ID = "b95677c89902dc35959d2ef9c3a455d9";
@@ -39,17 +39,20 @@ class WeatherFetchingTask extends AsyncTask<String, Void, String[]> {
     }
 
     @Override
-    protected String[] doInBackground(String... coordinates) {
+    protected String[] doInBackground(WeatherSettings... settings) {
         // These two need to be declared outside the try/catch
         // so that they can be closed in the finally block.
         HttpURLConnection urlConnection = null;
         BufferedReader reader = null;
 
-        if (coordinates.length < 1) {
-            throw new RuntimeException("Location parameter missing");
+        if (settings.length < 1) {
+            throw new RuntimeException("Settings parameter missing");
         }
 
-        String location = coordinates[0];
+        String location = settings[0].getLocation();
+        String temperatureUnit = settings[0].getTemperatureUnit();
+
+        Log.v(LOG_TAG, "Fetching weather for " + location + " shown as " + temperatureUnit);
 
         // Will contain the raw JSON response as a string.
         String forecastJsonStr = null;
@@ -114,7 +117,7 @@ class WeatherFetchingTask extends AsyncTask<String, Void, String[]> {
             }
         }
 
-        WeatherDataParser weatherDataParser = new WeatherDataParser();
+        WeatherDataParser weatherDataParser = new WeatherDataParser(settings[0]);
         String[] weatherForecast = {};
         try {
             weatherForecast = weatherDataParser.getWeatherDataFromJson(forecastJsonStr, DAYS);

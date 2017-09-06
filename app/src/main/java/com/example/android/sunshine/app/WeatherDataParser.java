@@ -10,6 +10,12 @@ import java.text.SimpleDateFormat;
 
 class WeatherDataParser {
 
+    private WeatherSettings weatherSettings;
+
+    WeatherDataParser(WeatherSettings weatherSettings) {
+        this.weatherSettings = weatherSettings;
+    }
+
     /* The date/time conversion code is going to be moved outside the asynctask later,
          * so for convenience we're breaking it out into its own method now.
          */
@@ -24,11 +30,21 @@ class WeatherDataParser {
      * Prepare the weather high/lows for presentation.
      */
     private String formatHighLows(double high, double low) {
+        if (weatherSettings.getTemperatureUnit().equals("imperial")) {
+            // Crazy Americans want Imperial units, convert the temperature
+            high = convertCelciusToFahrenheit(high);
+            low = convertCelciusToFahrenheit(low);
+        }
+
         // For presentation, assume the user doesn't care about tenths of a degree.
         long roundedHigh = Math.round(high);
         long roundedLow = Math.round(low);
 
         return roundedHigh + "/" + roundedLow;
+    }
+
+    private double convertCelciusToFahrenheit(double temperature) {
+        return temperature * 1.8 + 32;
     }
 
     /**
