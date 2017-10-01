@@ -2,7 +2,10 @@ package com.example.android.sunshine.app;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -46,8 +49,29 @@ public class MainActivity extends AppCompatActivity {
 
             return true;
         }
+        else if (id == R.id.action_show_location) {
+            openPreferredLocationInMap();
+
+            return true;
+        }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private void openPreferredLocationInMap() {
+        SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
+        String locationName = sharedPrefs.getString(getString(R.string.pref_location_key), getString(R.string.pref_location_default));
+
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        Uri geoLocation = new Uri.Builder()
+                .scheme("geo")
+                .path("0,0")
+                .appendQueryParameter("q", locationName)
+                .build();
+        intent.setData(geoLocation);
+        if (intent.resolveActivity(getPackageManager()) != null) {
+            startActivity(intent);
+        }
     }
 
     public void toastMe(View view) {
